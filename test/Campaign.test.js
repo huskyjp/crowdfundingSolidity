@@ -37,4 +37,13 @@ beforeEach(async () => {
   [campaignAddress] = await factory.methods.getDeployedCampaigns().call();
 
   campaign = await new web3.eth.Contract(compiledCampaign.abi, campaignAddress);
-})
+});
+
+
+describe('Campaigns', () => {
+  it('deploys a factory and a campaign', () => {
+    assert.ok(factory.options.address);
+    assert.ok(campaign.options.address);
+  });
+});
+
