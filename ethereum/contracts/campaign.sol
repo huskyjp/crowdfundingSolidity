@@ -39,7 +39,7 @@ contract Campaign {
         _;
     }
     
-    constructor (uint minimum, address campaignCreator) public {
+    constructor (uint minimum, address payable campaignCreator) public {
         manager = campaignCreator;
         minContribution = minimum;
     }
@@ -72,7 +72,7 @@ contract Campaign {
     }
     
     function approveRequest(uint index) public {
-        Request storage request = requests[index];
+        // Request storage request = requests[index];
         
         // check if already donated
         require(approvers[msg.sender]);
@@ -88,11 +88,11 @@ contract Campaign {
         // access specific index array
        //  Request storage request = requests[index];
         
-        require(request[index].approvalCount > (approversCount / 2));
-        require(!request[index].complete);
+        require(requests[index].approvalCount > (approversCount / 2));
+        require(!requests[index].complete);
         
         // transfer money and marka as true: completed
-        request[index].recipient.transfer(request[index].value);
-        request[index].complete = true;
+        requests[index].recipient.transfer(requests[index].value);
+        requests[index].complete = true;
     }
 }
