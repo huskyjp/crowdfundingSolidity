@@ -1,4 +1,4 @@
-const asset = require("asset");
+const assert = require("assert");
 const ganache = require("ganache-cli")
 const Web3 = require("web3");
 const web3 = new Web3(ganache.provider());
@@ -44,6 +44,25 @@ describe('Campaigns', () => {
   it('deploys a factory and a campaign', () => {
     assert.ok(factory.options.address);
     assert.ok(campaign.options.address);
+  });
+
+
+  // creator of campaign should be marked as the manager of the campaign that is created
+  it('marks caller as the campaign manager', async () => {
+    const manager = await campaign.methods.manager().call(); // just access to public manager variable
+    assert.strictEqual(accounts[0], manager);
+  });
+
+  // check if it is able to contribute to the campaign - and if the account is marked as approver
+  it('allows people to contribute money and marks them as approvers', async () => {
+    await campaign.methods.contribute().send({
+      value: '200',
+      from: accounts[1]
+    });
+    // get map of approvers and check if it marked as true
+    const isContributor = await campaign.methods.approvers(accounts[1]).call();
+    assert(isContributor);
+
   });
 });
 
