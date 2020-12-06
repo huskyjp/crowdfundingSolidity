@@ -32,6 +32,7 @@ if (output.errors) {
 } else {
   const contracts = output.contracts["Campaign.sol"];
   fs.ensureDirSync(buildPath);
+  console.log(output);
   for (let contractName in contracts) {
     const contract = contracts[contractName];
     fs.writeFileSync(
