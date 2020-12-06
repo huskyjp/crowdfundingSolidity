@@ -1,6 +1,5 @@
 pragma solidity >=0.4.17 < 0.8.0;
 
-
 contract CampaignFactory {
   address[] public deployedCampaigns;
 
@@ -13,9 +12,6 @@ contract CampaignFactory {
     return deployedCampaigns;
   }
 }
-
-
-
 
 contract Campaign {
     
