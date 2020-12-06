@@ -1,3 +1,1 @@
-"# crowdfunding_solidity" 
-"# crowdfunding_solidity" 
-"# crowdfunding_solidity" 
+# Simple blockchain based crowdfunding system
