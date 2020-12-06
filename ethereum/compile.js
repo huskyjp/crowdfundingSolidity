@@ -5,7 +5,6 @@ const fs = require('fs-extra');
 
 // delete the build folder
 const buildPath = path.resolve(__dirname, 'build');
-// fs.removeSync(buildPath);
 
 
 // read 'Campaign.sol' from the 'contracts' folder
@@ -17,40 +16,38 @@ const source = fs.readFileSync(campaignPath, 'utf-8');
 
 var input = {
   language: "Solidity",
-  source: {
+  sources: {
     "Campaign.sol": {
       content: source
     }
   },
   settings: {
     outputSelection: {
-      "*": {
-        "*": ["*"]
+      '*': {
+        '*': ['*']
       }
     }
   }
 };
 
-const output = JSON.parse(solc.compile(JSON.stringify(input)));
-// const output = solc.compile(source, 1).contracts;
-
+const output = JSON.parse(solc.compile(JSON.stringify(input.interface)));
 
 if(output.errors) {
   output.errors.forEach(err => {
     console.log(err.formattedMessage);
   });
 } else {
-const contracts = output.contracts["Campaign.sol"];
+  const contracts = output.contracts["Campaign.sol"];
 // recreate the folder
-fs.ensureDirSync(buildPath);
+  fs.ensureDirSync(buildPath);
 
 // write output to the 'build' directory
-for (let contractName in contracts) {
-  const contract = contracts[contractName];
-  fs.writeFileSync(
-    path.resolve(buildPath, `${contractName},json`),
-    JSON.stringify(contract, null, 2),
-    "utf8"
+  for (let contractName in contracts) {
+    const contract = contracts[contractName];
+    fs.writeFileSync(
+      path.resolve(buildPath, `${contractName}.json`),
+      JSON.stringify(contract, null, 2),
+    " utf8"
   );
   }
 }
