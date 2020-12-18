@@ -59,7 +59,7 @@ contract Campaign {
     function createRequest(string memory description, uint value, address payable recipient) public restricted {
         // check request balance and current balance
         require(value <= address(this).balance);
-        require(approvers[msg.sender]);
+        // require(approvers[msg.sender]);
         Request memory newRequest = Request({
             description: description,
             value: value,

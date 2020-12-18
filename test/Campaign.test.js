@@ -64,5 +64,58 @@ describe('Campaigns', () => {
     assert(isContributor);
 
   });
+
+  // check if minimum contribution user made
+  it('requires a minimum constribution', async () => {
+    try{
+      await campaign.methods.contribute().send({
+        value: '5',
+        from: accounts[1]
+      });
+      assert(false);
+    } catch (err) {
+      assert(err);
+    }
+  });
+
+  // check if manager has a power to request for payment
+  it('allows manager to make a payment request', async () => {
+    await campaign.methods
+    .createRequest('Buy Bitcoin', '100', accounts[1])
+    .send({
+      from: accounts[0],
+      gas: 1000000
+    });
+    const request = await campaign.methods.requests(0).call();
+    assert.strictEqual('Buy Bitcoin', request.description);
+
+  });
+
+  // check if other parties received
+  it('check if request is finalizable', async () => {
+    await campaign.methods.contribute().send({
+      from: accounts[0],
+      value: 2000
+    });
+
+    await campaign.methods.createRequest('Please let me use ETH',100, accounts[1]).send({
+      from: accounts[0], 
+      gas: 1000000
+    });
+
+  await campaign.methods.approveRequest(0).send({
+    from: accounts[0],
+    gas: 1000000
+  });
+
+  await campaign.methods.finalizeRequest(0).send({
+    from: accounts[0],
+    gas: 1000000
+  });
+
+  let request = await campaign.methods.requests(0).call();
+  assert.ok(request.complete);
+});
+
 });
 
